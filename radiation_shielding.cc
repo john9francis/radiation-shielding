@@ -11,6 +11,10 @@ int main(int argc, char** argv)
 		ui = new G4UIExecutive(argc, argv);
 	}
 
+	// ==============================================================
+	// Register our required classes
+	// ==============================================================
+
 	// get pointer to UI manager
 	G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
