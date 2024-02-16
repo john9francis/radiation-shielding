@@ -6,7 +6,7 @@ msbuild radiation_shielding.sln
 
 cd release
 
-.\radiation_shielding test.mac
+.\radiation_shielding
 
 cd ..
 cd ..

@@ -2,6 +2,13 @@
 
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
+#include "G4RunManagerFactory.hh"
+
+#include "PhysicsList.hh"
+#include "ActionInit.hh"
+#include "DetectorConstruction.hh"
+
+using namespace rad_shield;
 
 int main(int argc, char** argv)
 {
@@ -14,6 +21,14 @@ int main(int argc, char** argv)
 	// ==============================================================
 	// Register our required classes
 	// ==============================================================
+	
+	// create default runmanager
+	auto runManager =
+		G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
+
+	runManager->SetUserInitialization(new PhysicsList());
+	runManager->SetUserInitialization(new DetectorConstruction());
+	runManager->SetUserInitialization(new ActionInit());
 
 	// get pointer to UI manager
 	G4UImanager* UImanager = G4UImanager::GetUIpointer();

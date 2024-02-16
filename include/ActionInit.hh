@@ -10,7 +10,7 @@ namespace rad_shield {
 		~ActionInit() = default;
 
 		void Build() const override;
-		void BuildForMaster() const override;
+		//void BuildForMaster() const override;
 	};
 }
 
