@@ -18,6 +18,11 @@ namespace rad_shield {
 		analysisManager->SetH1XAxisTitle(0, "Depth (cm)");
 		analysisManager->SetH1YAxisTitle(0, "Energy deposited (MeV)");
 
+		// graph of the original energies
+		analysisManager->CreateH1("OriginalEnergies", "Original Particle Energies", 100, 0, 10 * MeV);
+		analysisManager->SetH1XAxisTitle(1, "Energy (MeV)");
+		analysisManager->SetH1YAxisTitle(1, "Number of Particles");
+
 	}
 
 	void RunAction::BeginOfRunAction(const G4Run* aRun) {

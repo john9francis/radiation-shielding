@@ -13,6 +13,8 @@ namespace rad_shield {
 		void GeneratePrimaries(G4Event*) override;
 
 		G4ParticleGun* fParticleGun;
+	private:
+		G4double generateRightSkewed(G4double mean);
 	};
 }
 

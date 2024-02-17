@@ -2,6 +2,11 @@
 
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
+#include "G4AnalysisManager.hh"
+
+#include <iostream>
+#include <cmath>
+#include <random>
 
 namespace rad_shield {
 	PrimaryGeneratorAction::PrimaryGeneratorAction() {
@@ -20,7 +25,7 @@ namespace rad_shield {
 
 		fParticleGun->SetParticleDefinition(particle);
 
-		fParticleGun->SetParticleEnergy(.511 * MeV);
+		
 	}
 
 	PrimaryGeneratorAction::~PrimaryGeneratorAction() {
@@ -28,7 +33,34 @@ namespace rad_shield {
 	}
 
 	void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
+		// generate energy from a right skewed distribution
+		G4double meanEnergy = .511 * MeV;
+		G4double skewedEnergy = generateRightSkewed(meanEnergy);
+
+		fParticleGun->SetParticleEnergy(skewedEnergy);
+
+		// make sure to add this particle to analysis
+		auto analysisManager = G4AnalysisManager::Instance();
+		analysisManager->FillH1(1, skewedEnergy);
 
 		fParticleGun->GeneratePrimaryVertex(anEvent);
+	}
+
+
+	// my own function to generate a right skewed distribution
+
+
+	std::default_random_engine generator;
+
+	G4double PrimaryGeneratorAction::generateRightSkewed(G4double mean) {
+		std::uniform_real_distribution<G4double> uniform(0.0, 1.0);
+
+		// generate random uniform number
+		G4double u = uniform(generator);
+
+		// make it right skewed
+		G4double x = -log(u) * mean;
+
+		return x;
 	}
 }

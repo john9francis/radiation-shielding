@@ -1,2 +1,3 @@
 /run/initialize
+/gun/energy 1 MeV
 /run/beamOn 1000000
