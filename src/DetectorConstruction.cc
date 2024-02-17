@@ -44,27 +44,27 @@ namespace rad_shield {
 		);
 
 
-		// test box 
-		G4Material* gold = nist->FindOrBuildMaterial("G4_Au");
+		// phantom
+		G4Material* water = nist->FindOrBuildMaterial("G4_WATER");
 
-		G4Box* solidTestBox = new G4Box(
-			"solidTestBox",
-			10 * cm,
-			10 * cm,
-			10 * cm
+		G4Box* solidPhantom = new G4Box(
+			"solidPhantom",
+			15 * cm,
+			15 * cm,
+			15 * cm
 		);
 
-		G4LogicalVolume* logTestBox = new G4LogicalVolume(
-			solidTestBox,
-			gold,
-			"logicTestBox"
+		G4LogicalVolume* logicPhantom = new G4LogicalVolume(
+			solidPhantom,
+			water,
+			"logicPhantom"
 		);
 
 		new G4PVPlacement(
 			nullptr,
 			G4ThreeVector(),
-			logTestBox,
-			"physTestBox",
+			logicPhantom,
+			"physPhantom",
 			logicWorld,
 			false,
 			0
