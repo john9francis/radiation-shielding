@@ -16,6 +16,7 @@ namespace rad_shield {
 		G4ParticleGun* fParticleGun;
 	private:
 		G4double generateRightSkewed(G4double mean, G4double sigma=.5*MeV);
+		G4double generateExponentialDecay(G4double paramA=0, G4double paramB=-1.12);
 	};
 }
 

@@ -18,7 +18,7 @@ namespace rad_shield {
 		fParticleGun->SetParticlePosition(G4ThreeVector(0, 0, -1 * m));
 
 		// set default particle and energy
-		G4String particleName = "gamma";
+		G4String particleName = "e-";
 		G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
 		G4ParticleDefinition* particle
 			= particleTable->FindParticle(particleName);
@@ -34,8 +34,7 @@ namespace rad_shield {
 
 	void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
 		// generate energy from a right skewed distribution
-		G4double meanEnergy = .511 * MeV;
-		G4double skewedEnergy = generateRightSkewed(meanEnergy);
+		G4double skewedEnergy = generateExponentialDecay();
 
 		fParticleGun->SetParticleEnergy(skewedEnergy);
 
@@ -76,5 +75,17 @@ namespace rad_shield {
 		else {
 			return x;
 		}
+	}
+
+	G4double PrimaryGeneratorAction::generateExponentialDecay(G4double paramA, G4double paramB) {
+		std::uniform_real_distribution<G4double> uniform(0, 6);
+		G4double x = 0;
+		while (x < .511 * MeV) {
+			x = uniform(generator);
+
+			x = std::exp(paramA + paramB * x);
+		}
+
+		return x;
 	}
 }
