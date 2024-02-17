@@ -29,8 +29,6 @@ namespace rad_shield {
 
 	void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
 
-		
-
 		fParticleGun->GeneratePrimaryVertex(anEvent);
 	}
 }
