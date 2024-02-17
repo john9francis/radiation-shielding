@@ -3,6 +3,7 @@
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
 #include "G4RunManagerFactory.hh"
+#include "G4VisExecutive.hh"
 
 #include "PhysicsList.hh"
 #include "ActionInit.hh"
@@ -30,6 +31,10 @@ int main(int argc, char** argv)
 	runManager->SetUserInitialization(new DetectorConstruction());
 	runManager->SetUserInitialization(new ActionInit());
 
+	// init vis manager
+	G4VisManager* visManager = new G4VisExecutive;
+	visManager->Initialize();
+
 	// get pointer to UI manager
 	G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
@@ -41,6 +46,8 @@ int main(int argc, char** argv)
 		UImanager->ApplyCommand(command + fileName);
 	}
 	else {
+		// run visualization script
+		UImanager->ApplyCommand("/control/execute _vis.mac");
 		// use UI
 		ui->SessionStart();
 		delete ui;
