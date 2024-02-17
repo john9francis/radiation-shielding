@@ -52,14 +52,19 @@ namespace rad_shield {
 
 	std::default_random_engine generator;
 
-	G4double PrimaryGeneratorAction::generateRightSkewed(G4double mean) {
-		std::uniform_real_distribution<G4double> uniform(0.0, 1.0);
+	G4double PrimaryGeneratorAction::generateRightSkewed(G4double mean, G4double sigma) {
+		std::normal_distribution<G4double> normal(mean, sigma);
 
-		// generate random uniform number
-		G4double u = uniform(generator);
+		G4double x = normal(generator);
 
-		// make it right skewed
-		G4double x = -log(u) * mean;
+		// Introduce a scaling factor to control the strength of skewness
+		G4double skewness_factor = 0.8;  // Adjust this parameter to control skewness
+
+		// Apply a slightly less right-skewed transformation
+		x = 1.0 / std::pow(x, 2 * skewness_factor);
+
+		// Ensure the value is within the desired range [0, 6]
+		x = std::max(0.0, std::min(6.0, x));
 
 		return x;
 	}

@@ -3,6 +3,7 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
+#include "G4SystemOfUnits.hh"
 
 namespace rad_shield {
 	class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
@@ -14,7 +15,7 @@ namespace rad_shield {
 
 		G4ParticleGun* fParticleGun;
 	private:
-		G4double generateRightSkewed(G4double mean);
+		G4double generateRightSkewed(G4double mean, G4double sigma=.5*MeV);
 	};
 }
 
