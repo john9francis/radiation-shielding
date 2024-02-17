@@ -15,7 +15,7 @@ namespace rad_shield {
 
 		// output PDD graph for the phantom
 		analysisManager->CreateH1("PDD", "PDD Graph", 100, 0, 30 * cm);
-		analysisManager->SetH1XAxisTitle(0, "Depth (cm)");
+		analysisManager->SetH1XAxisTitle(0, "Depth (mm)");
 		analysisManager->SetH1YAxisTitle(0, "Energy deposited (MeV)");
 
 		// graph of the original energies
