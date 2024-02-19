@@ -11,19 +11,29 @@
 
 namespace rad_shield {
 	PrimaryGeneratorAction::PrimaryGeneratorAction() {
+		// init our member vars
+		fRightSkewedDist = new G4bool(false);
+		fExponentialDecayDist = new G4bool(false);
+		fSigma = new G4double(.5 * MeV);
+
+
+		// init particle gun
 		G4int nParticles = 1;
 		fParticleGun = new G4ParticleGun(nParticles);
 
 		// set gun position
 		fParticleGun->SetParticlePosition(G4ThreeVector(0, 0, -1 * m));
 
-		// set default particle and energy
+		// set default particle
 		G4String particleName = "e-";
 		G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
 		G4ParticleDefinition* particle
 			= particleTable->FindParticle(particleName);
 
 		fParticleGun->SetParticleDefinition(particle);
+
+		// set default energy
+		fParticleGun->SetParticleEnergy(.511 * MeV);
 
 		
 	}
@@ -33,10 +43,19 @@ namespace rad_shield {
 	}
 
 	void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
-		// generate energy from a right skewed distribution
-		G4double skewedEnergy = generateExponentialDecay();
 
-		fParticleGun->SetParticleEnergy(skewedEnergy);
+		G4double energy = fParticleGun->GetParticleEnergy();
+
+		// check if the user wants to skew the energy
+		if (fRightSkewedDist) {
+			energy = generateRightSkewed(energy, *fSigma);
+		}
+		else if (fExponentialDecayDist) {
+			energy = generateExponentialDecay();
+		}
+
+		fParticleGun->SetParticleEnergy(energy);
+
 
 		// make the energy spread out
 		G4ThreeVector direction = G4RandomDirection(.99);
@@ -46,13 +65,13 @@ namespace rad_shield {
 
 		// make sure to add this particle to analysis
 		auto analysisManager = G4AnalysisManager::Instance();
-		analysisManager->FillH1(1, skewedEnergy);
+		analysisManager->FillH1(1, energy);
 
 		fParticleGun->GeneratePrimaryVertex(anEvent);
 	}
 
 
-	// my own function to generate a right skewed distribution
+	// my own functions to generate different energy distributions
 
 
 	std::default_random_engine generator;

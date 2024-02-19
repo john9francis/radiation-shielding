@@ -32,11 +32,10 @@ namespace rad_shield {
 
 	void PGAMessenger::SetNewValue(G4UIcommand* command, G4String newValue) {
 		if (command == fSetRightSkewCmd) {
-			G4cout << "Setting right skew with standard deviation of: " << newValue << G4endl;
-
+			fPGA->SetRightSkewedFlag();
 		}
 		if (command == fResetCmd) {
-			G4cout << "Resetting..." << G4endl;
+			fPGA->ResetDistFlags();
 		}
 	}
 }
