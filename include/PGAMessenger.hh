@@ -3,6 +3,7 @@
 
 #include "G4UImessenger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithoutParameter.hh"
 
 #include "PrimaryGeneratorAction.hh"
 
@@ -18,7 +19,10 @@ namespace rad_shield {
 	private:
 		PrimaryGeneratorAction* fPGA;
 
+		G4UIdirectory* fDirectory;
+
 		G4UIcmdWithADoubleAndUnit* fSetRightSkewCmd;
+		G4UIcmdWithoutParameter* fResetCmd;
 
 
 	};
