@@ -9,6 +9,9 @@
 #include "ActionInit.hh"
 #include "DetectorConstruction.hh"
 
+#include "PrimaryGeneratorAction.hh"
+#include "PGAMessenger.hh"
+
 using namespace rad_shield;
 
 int main(int argc, char** argv)
@@ -29,7 +32,12 @@ int main(int argc, char** argv)
 
 	runManager->SetUserInitialization(new PhysicsList());
 	runManager->SetUserInitialization(new DetectorConstruction());
-	runManager->SetUserInitialization(new ActionInit());
+
+	// pointer to our pga to be used in the messenger
+	PrimaryGeneratorAction* pga = new PrimaryGeneratorAction();
+	new PGAMessenger(pga);
+	
+	runManager->SetUserInitialization(new ActionInit(pga));
 
 	// init vis manager
 	G4VisManager* visManager = new G4VisExecutive;

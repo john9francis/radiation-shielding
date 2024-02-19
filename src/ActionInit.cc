@@ -5,8 +5,13 @@
 #include "SteppingAction.hh"
 
 namespace rad_shield {
+	ActionInit::ActionInit(PrimaryGeneratorAction* pga) {
+		fPGA = pga;
+	}
+
+
 	void ActionInit::Build() const {
-		SetUserAction(new PrimaryGeneratorAction());
+		SetUserAction(fPGA);
 
 		SetUserAction(new RunAction());
 
