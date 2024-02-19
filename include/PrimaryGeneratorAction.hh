@@ -17,6 +17,10 @@ namespace rad_shield {
 	private:
 		G4double generateRightSkewed(G4double mean, G4double sigma=.5*MeV);
 		G4double generateExponentialDecay(G4double paramA=0, G4double paramB=-1.12);
+
+		G4bool* rightSkewedDist;
+
+		G4bool* exponentialDecayDist;
 	};
 }
 
