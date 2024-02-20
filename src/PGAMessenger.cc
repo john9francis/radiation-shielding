@@ -32,6 +32,7 @@ namespace rad_shield {
 
 	void PGAMessenger::SetNewValue(G4UIcommand* command, G4String newValue) {
 		if (command == fSetRightSkewCmd) {
+			fPGA->SetSigma(fSetRightSkewCmd->GetNewDoubleRawValue(newValue));
 			fPGA->SetRightSkewedFlag();
 		}
 		if (command == fResetCmd) {
