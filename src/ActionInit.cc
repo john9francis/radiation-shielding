@@ -11,7 +11,7 @@ namespace rad_shield {
 
 
 	void ActionInit::Build() const {
-		SetUserAction(fPGA);
+		SetUserAction(new PrimaryGeneratorAction());
 
 		SetUserAction(new RunAction());
 
