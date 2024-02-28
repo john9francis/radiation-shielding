@@ -11,14 +11,6 @@ namespace rad_shield {
 	DetectorConstruction::DetectorConstruction() {}
 
 	void DetectorConstruction::RemoveShield() {
-		if (fSolidShield != nullptr) {
-			delete fSolidShield;
-			fSolidShield = nullptr;
-		}
-		if (fLogicShield != nullptr) {
-			delete fLogicShield;
-			fLogicShield = nullptr;
-		}
 		if (fPhysShield != nullptr) {
 			delete fPhysShield;
 			fPhysShield = nullptr;
@@ -31,6 +23,56 @@ namespace rad_shield {
 		}
 		return true;
 	}
+
+	///////////////////////////////////////////////////////////////////////////////
+	// Trying a new approach where I simply update the material or the thickness //
+	///////////////////////////////////////////////////////////////////////////////
+
+	G4bool DetectorConstruction::UpdateShieldMaterial(G4String newMaterialName) {
+
+		// first make sure the material exists
+		auto nist = G4NistManager::Instance();
+		auto newMaterial = nist->FindOrBuildMaterial(newMaterialName);
+		if (newMaterial == nullptr) {
+			return false;
+		}
+
+		// get the name of the old logic shield
+		G4String name = fLogicShield->GetName();
+
+		// create a new logical volume and update the old one
+		G4LogicalVolume* newLogicShield = new G4LogicalVolume(
+			fSolidShield,
+			newMaterial,
+			name
+		);
+
+		// set the phys volume to this new one
+		fPhysShield->SetLogicalVolume(newLogicShield);
+
+		// delete the old one
+		delete fLogicShield;
+
+		// reassign our member variable
+		fLogicShield = newLogicShield;
+
+		return true;
+	}
+
+	G4bool DetectorConstruction::UpdateShieldThickness(G4double newThickness) {
+
+		// first make sure it's not too thick
+		if (newThickness > fMaxShieldThickness) {
+			return false;
+		}
+
+		// I wonder if this will be enough..?
+		fSolidShield->SetZHalfLength(newThickness / 2);
+
+
+		return true;
+	}
+	
 
 	G4bool DetectorConstruction::CreateShield(G4double thickness, G4String materialName) {
 		// Returns true if the shield was created sucessfully
@@ -49,18 +91,18 @@ namespace rad_shield {
 		// Also make sure the material is in the nist database
 		G4NistManager* nist = G4NistManager::Instance();
 
-		//auto shieldMaterial = nist->FindMaterial(materialName);
+		auto shieldMaterial = nist->FindMaterial(materialName);
 
-		//if (shieldMaterial == nullptr) {
-		//	G4cout
-		//		<< "Attempted to create a shield "
-		//		<< "With a material not found in the "
-		//		<< "NIST material database. Attempted material: "
-		//		<< materialName
-		//		<< G4endl;
-		//
-		//	return false;
-		//}
+		if (shieldMaterial == nullptr) {
+			G4cout
+				<< "Attempted to create a shield "
+				<< "With a material not found in the "
+				<< "NIST material database. Attempted material: "
+				<< materialName
+				<< G4endl;
+		
+			return false;
+		}
 
 		// make sure world has been initialized
 		if (fLogicWorld == nullptr) {
@@ -73,8 +115,12 @@ namespace rad_shield {
 			return false;
 		}
 
-		// if we pass the test, create the shield and add to world
+		// if we pass the test, create the shield and add to world.
+
+		// remove old shield
 		RemoveShield();
+
+		// create the new one
 
 		G4ThreeVector shieldPos = G4ThreeVector();
 

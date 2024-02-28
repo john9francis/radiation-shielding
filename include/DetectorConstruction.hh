@@ -21,6 +21,9 @@ namespace rad_shield {
 		void RemoveShield();
 		G4bool ExistsShield();
 
+		G4bool UpdateShieldThickness(G4double newThickness);
+		G4bool UpdateShieldMaterial(G4String newMaterialName);
+
 	private:
 		G4LogicalVolume* fLogicWorld = nullptr;
 

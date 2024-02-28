@@ -34,22 +34,30 @@ namespace rad_shield {
 
 	void DetectorMessenger::SetNewValue(G4UIcommand* cmd, G4String newValues) {
 		if (cmd == fCreateShield) {
+			// TODO: basically show it visually and set it to the previous material
+
 			fDetConstruction->CreateShield(*fShieldThickness, *fMaterialName);
 		}
 		if (cmd == fRemoveShield) {
+			// TODO: basically hide it and set it to vacuum.
+
 			fDetConstruction->RemoveShield();
 			// bug: when you change the shield's size or material,
 			// then remove it, then try to run beam on, it crashes.
+			// 
+			// the bug was also present when I removed, created, and removed again the shield.
+			// 
+			// my guess is it's something to do with the create shield function?
 		}
 		if (cmd == fSetShieldMaterial) {
-			if (fDetConstruction->CreateShield(*fShieldThickness, newValues)) {
+			if (fDetConstruction->UpdateShieldMaterial(newValues)) {
 				*fMaterialName = newValues;
 			}
 		}
 		if (cmd == fSetShieldThickness) {
 			G4double newThickness = fSetShieldThickness->GetNewDoubleValue(newValues);
 
-			if (fDetConstruction->CreateShield(newThickness, *fMaterialName)) {
+			if (fDetConstruction->UpdateShieldThickness(newThickness)) {
 				*fShieldThickness = newThickness;
 			}
 		}
