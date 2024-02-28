@@ -12,6 +12,12 @@ namespace rad_shield {
 		// nothing yet...
 	}
 
+	void DetectorConstruction::CreateShield(G4double thickness, G4String materialName) {
+		// create an object and add it to the world
+		G4ThreeVector shieldPos = G4ThreeVector();
+		G4double maxThickness = 1.5 * m;
+	}
+
 	G4VPhysicalVolume* DetectorConstruction::Construct() {
 
 		G4NistManager* nist = G4NistManager::Instance();
@@ -54,6 +60,8 @@ namespace rad_shield {
 			15 * cm
 		);
 
+		G4ThreeVector phantomPos = G4ThreeVector(0, 0, 1 * m);
+
 		G4LogicalVolume* logicPhantom = new G4LogicalVolume(
 			solidPhantom,
 			water,
@@ -62,7 +70,7 @@ namespace rad_shield {
 
 		new G4PVPlacement(
 			nullptr,
-			G4ThreeVector(),
+			phantomPos,
 			logicPhantom,
 			"physPhantom",
 			logicWorld,
