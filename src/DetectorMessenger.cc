@@ -12,11 +12,11 @@ namespace rad_shield {
 		fDirectory->SetGuidance("Commands to create or adjust a radiation shield.");
 
 		// Create commands
-		fCreateShield = new G4UIcmdWithoutParameter("/shield/create", this);
+		fCreateShield = new G4UIcmdWithoutParameter("/shield/enable", this);
 		fCreateShield->SetGuidance("Adds the shield to the world");
 		fCreateShield->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-		fRemoveShield = new G4UIcmdWithoutParameter("/shield/remove", this);
+		fRemoveShield = new G4UIcmdWithoutParameter("/shield/disable", this);
 		fRemoveShield->SetGuidance("Removes the shield from the world");
 		fRemoveShield->AvailableForStates(G4State_PreInit, G4State_Idle);
 
@@ -41,11 +41,6 @@ namespace rad_shield {
 		if (cmd == fCreateShield) {
 			// TODO: basically show it visually and set it to the previous material
 			fDetConstruction->UpdateShieldMaterial(*fMaterialName);
-
-			fDetConstruction->CreateShield(*fShieldThickness, *fMaterialName);
-
-			// show the shield to the viewport
-			//UI->ApplyCommand("/vis/geometry/set/visibility logicShield 0 true");
 		}
 		if (cmd == fRemoveShield) {
 			// make the shield vacuum
@@ -53,15 +48,26 @@ namespace rad_shield {
 			// instead of hardcoding it.
 			fDetConstruction->UpdateShieldMaterial("G4_Galactic");
 
-			// hide shield from viewport
-			// note: again, ideally, we would get the name of the logicShield
-			// instead of hardcoding it, but it's fine for now.
-			//UI->ApplyCommand("/vis/geometry/set/visibility logicShield 0 false");
-
 		}
 		if (cmd == fSetShieldMaterial) {
 			if (fDetConstruction->UpdateShieldMaterial(newValues)) {
 				*fMaterialName = newValues;
+			}
+			else {
+				// print exception
+				G4cout
+					<< "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+					<< G4endl
+					<< "WARNING: "
+					<< "nist material, \""
+					<< newValues
+					<< "\" is not found. The shield will continue to "
+					<< "be made of the \""
+					<< *fMaterialName
+					<< "\" material."
+					<< G4endl
+					<< "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+					<< G4endl;
 			}
 		}
 		if (cmd == fSetShieldThickness) {
@@ -69,6 +75,21 @@ namespace rad_shield {
 
 			if (fDetConstruction->UpdateShieldThickness(newThickness)) {
 				*fShieldThickness = newThickness;
+			}
+			else {
+				// print exception
+				G4cout
+					<< "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+					<< G4endl
+					<< "WARNING: "
+					<< "Requested thickness: \""
+					<< newValues
+					<< "\" was too thick to fit "
+					<< "in the world. The shield will contiue "
+					<< "with the same thickness."
+					<< G4endl
+					<< "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+					<< G4endl;
 			}
 		}
 

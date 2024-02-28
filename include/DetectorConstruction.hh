@@ -17,10 +17,6 @@ namespace rad_shield {
 		G4VPhysicalVolume* Construct() override;
 
 		// For Detector Messenger
-		G4bool CreateShield(G4double thickness, G4String materialName);
-		void RemoveShield();
-		G4bool ExistsShield();
-
 		G4bool UpdateShieldThickness(G4double newThickness);
 		G4bool UpdateShieldMaterial(G4String newMaterialName);
 
