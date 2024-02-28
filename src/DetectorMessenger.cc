@@ -35,19 +35,26 @@ namespace rad_shield {
 	void DetectorMessenger::SetNewValue(G4UIcommand* cmd, G4String newValues) {
 		if (cmd == fCreateShield) {
 			// TODO: basically show it visually and set it to the previous material
+			fDetConstruction->UpdateShieldMaterial(*fMaterialName);
 
 			fDetConstruction->CreateShield(*fShieldThickness, *fMaterialName);
+
+			// show the shield to the viewport
+			G4UImanager* ui = G4UImanager::GetUIpointer();
+			ui->ApplyCommand("/vis/geometry/set/visibility logicShield 0 true");
 		}
 		if (cmd == fRemoveShield) {
-			// TODO: basically hide it and set it to vacuum.
+			// make the shield vacuum
+			// note: in the future, set it to the world material
+			// instead of hardcoding it.
+			fDetConstruction->UpdateShieldMaterial("G4_Galactic");
 
-			fDetConstruction->RemoveShield();
-			// bug: when you change the shield's size or material,
-			// then remove it, then try to run beam on, it crashes.
-			// 
-			// the bug was also present when I removed, created, and removed again the shield.
-			// 
-			// my guess is it's something to do with the create shield function?
+			// hide shield from viewport
+			// note: again, ideally, we would get the name of the logicShield
+			// instead of hardcoding it, but it's fine for now.
+			G4UImanager* ui = G4UImanager::GetUIpointer();
+			ui->ApplyCommand("/vis/geometry/set/visibility logicShield 0 false");
+
 		}
 		if (cmd == fSetShieldMaterial) {
 			if (fDetConstruction->UpdateShieldMaterial(newValues)) {
