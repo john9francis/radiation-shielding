@@ -40,13 +40,15 @@ namespace rad_shield {
 			fDetConstruction->RemoveShield();
 		}
 		if (cmd == fSetShieldMaterial) {
-			if (fDetConstruction->CreateShield(*fShieldThickness, *fMaterialName)) {
+			if (fDetConstruction->CreateShield(*fShieldThickness, newValues)) {
 				*fMaterialName = newValues;
 			}
 		}
 		if (cmd == fSetShieldThickness) {
-			if (fDetConstruction->CreateShield(*fShieldThickness, *fMaterialName)) {
-				*fShieldThickness = fSetShieldThickness->GetNewDoubleValue(newValues);
+			G4double newThickness = fSetShieldThickness->GetNewDoubleValue(newValues);
+
+			if (fDetConstruction->CreateShield(newThickness, *fMaterialName)) {
+				*fShieldThickness = newThickness;
 			}
 		}
 
