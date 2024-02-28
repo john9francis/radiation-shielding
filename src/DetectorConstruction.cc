@@ -37,24 +37,7 @@ namespace rad_shield {
 			return false;
 		}
 
-		// get the name of the old logic shield
-		G4String name = fLogicShield->GetName();
-
-		// create a new logical volume and update the old one
-		G4LogicalVolume* newLogicShield = new G4LogicalVolume(
-			fSolidShield,
-			newMaterial,
-			name
-		);
-
-		// set the phys volume to this new one
-		fPhysShield->SetLogicalVolume(newLogicShield);
-
-		// delete the old one
-		delete fLogicShield;
-
-		// reassign our member variable
-		fLogicShield = newLogicShield;
+		fLogicShield->SetMaterial(newMaterial);
 
 		return true;
 	}
@@ -66,7 +49,6 @@ namespace rad_shield {
 			return false;
 		}
 
-		// I wonder if this will be enough..?
 		fSolidShield->SetZHalfLength(newThickness / 2);
 
 
