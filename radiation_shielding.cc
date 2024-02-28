@@ -9,7 +9,7 @@
 #include "ActionInit.hh"
 #include "DetectorConstruction.hh"
 
-#include "PrimaryGeneratorAction.hh"
+#include "DetectorMessenger.hh"
 
 using namespace rad_shield;
 
@@ -30,7 +30,8 @@ int main(int argc, char** argv)
 		G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
 
 	runManager->SetUserInitialization(new PhysicsList());
-	runManager->SetUserInitialization(new DetectorConstruction());
+	DetectorConstruction* detConstruction = new DetectorConstruction();
+	runManager->SetUserInitialization(detConstruction);
 	runManager->SetUserInitialization(new ActionInit());
 
 	// init vis manager
@@ -39,6 +40,10 @@ int main(int argc, char** argv)
 
 	// get pointer to UI manager
 	G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
+	// init our own detector messenger
+	DetectorMessenger* detMessenger = new DetectorMessenger(detConstruction);
+
 
 	// Run macro or start UI
 	if (!ui) {

@@ -24,8 +24,8 @@ namespace rad_shield {
 		G4UIdirectory* fDirectory;
 
 		// smaller things to keep track of
-		G4double* shieldThickness = new G4double(5 * cm);
-		G4String* materialName = new G4String("G4_W");
+		G4double* fShieldThickness = new G4double(5 * cm);
+		G4String* fMaterialName = new G4String("G4_W");
 
 		// commands
 		G4UIcmdWithoutParameter* fCreateShield;

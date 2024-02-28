@@ -8,18 +8,25 @@
 
 
 namespace rad_shield {
-	DetectorConstruction::DetectorConstruction() {
-		// nothing yet...
-	}
+	DetectorConstruction::DetectorConstruction() {}
 
 	void DetectorConstruction::RemoveShield() {
-		if (fShield) {
-			delete fShield;
+		if (fSolidShield != nullptr) {
+			delete fSolidShield;
+			fSolidShield = nullptr;
+		}
+		if (fLogicShield != nullptr) {
+			delete fLogicShield;
+			fLogicShield = nullptr;
+		}
+		if (fPhysShield != nullptr) {
+			delete fPhysShield;
+			fPhysShield = nullptr;
 		}
 	}
 
 	G4bool DetectorConstruction::ExistsShield() {
-		if (fShield == nullptr) {
+		if (fPhysShield == nullptr) {
 			return false;
 		}
 		return true;
@@ -42,18 +49,18 @@ namespace rad_shield {
 		// Also make sure the material is in the nist database
 		G4NistManager* nist = G4NistManager::Instance();
 
-		auto shieldMaterial = nist->FindMaterial(materialName);
+		//auto shieldMaterial = nist->FindMaterial(materialName);
 
-		if (shieldMaterial == nullptr) {
-			G4cout
-				<< "Attempted to create a shield "
-				<< "With a material not found in the "
-				<< "NIST material database. Attempted material: "
-				<< materialName
-				<< G4endl;
-
-			return false;
-		}
+		//if (shieldMaterial == nullptr) {
+		//	G4cout
+		//		<< "Attempted to create a shield "
+		//		<< "With a material not found in the "
+		//		<< "NIST material database. Attempted material: "
+		//		<< materialName
+		//		<< G4endl;
+		//
+		//	return false;
+		//}
 
 		// make sure world has been initialized
 		if (fLogicWorld == nullptr) {
@@ -67,8 +74,34 @@ namespace rad_shield {
 		}
 
 		// if we pass the test, create the shield and add to world
+		RemoveShield();
 
 		G4ThreeVector shieldPos = G4ThreeVector();
+
+		G4Material* shieldMat = nist->FindOrBuildMaterial(materialName);
+
+		fSolidShield = new G4Box(
+			"solidShield",
+			1 * m,
+			1 * m,
+			thickness / 2
+		);
+
+		fLogicShield = new G4LogicalVolume(
+			fSolidShield,
+			shieldMat,
+			"logicShield"
+		);
+
+		fPhysShield = new G4PVPlacement(
+			nullptr,
+			shieldPos,
+			fLogicShield,
+			"physShield",
+			fLogicWorld,
+			false,
+			0
+		);
 
 		return true;
 	}
@@ -100,6 +133,34 @@ namespace rad_shield {
 			fLogicWorld,
 			"physWorld",
 			nullptr,
+			false,
+			0
+		);
+
+
+		G4ThreeVector shieldPos = G4ThreeVector();
+
+		G4Material* shieldMat = nist->FindOrBuildMaterial("G4_W");
+
+		fSolidShield = new G4Box(
+			"solidShield",
+			1 * m,
+			1 * m,
+			5 * cm / 2
+		);
+
+		fLogicShield = new G4LogicalVolume(
+			fSolidShield,
+			shieldMat,
+			"logicShield"
+		);
+
+		fPhysShield = new G4PVPlacement(
+			nullptr,
+			shieldPos,
+			fLogicShield,
+			"physShield",
+			fLogicWorld,
 			false,
 			0
 		);

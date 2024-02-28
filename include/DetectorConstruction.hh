@@ -4,6 +4,10 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "G4SystemOfUnits.hh"
 
+#include "G4Box.hh"
+#include "G4LogicalVolume.hh"
+#include "G4PVPlacement.hh"
+
 namespace rad_shield {
 	class DetectorConstruction : public G4VUserDetectorConstruction {
 	public:
@@ -19,7 +23,10 @@ namespace rad_shield {
 
 	private:
 		G4LogicalVolume* fLogicWorld = nullptr;
-		G4LogicalVolume* fShield = nullptr;
+
+		G4Box* fSolidShield = nullptr;
+		G4LogicalVolume* fLogicShield = nullptr;
+		G4VPhysicalVolume* fPhysShield = nullptr;
 
 		G4double fMaxShieldThickness = 1.5 * m;
 	};

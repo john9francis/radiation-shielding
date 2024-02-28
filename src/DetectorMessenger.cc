@@ -1,5 +1,7 @@
 #include "DetectorMessenger.hh"
 
+#include "G4UImanager.hh"
+
 namespace rad_shield {
 
 	DetectorMessenger::DetectorMessenger(DetectorConstruction* detCons)
@@ -20,16 +22,37 @@ namespace rad_shield {
 
 		fSetShieldMaterial = new G4UIcmdWithAString("/shield/setMaterial", this);
 		fSetShieldMaterial->SetGuidance("Sets the material of the shield");
+		fSetShieldMaterial->SetParameterName("New material name", false);
 		fSetShieldMaterial->AvailableForStates(G4State_PreInit, G4State_Idle);
 
 		fSetShieldThickness = new G4UIcmdWithADoubleAndUnit("/shield/setThickness", this);
 		fSetShieldThickness->SetGuidance("Changes the thickness of the shield");
+		fSetShieldThickness->SetParameterName("New thickness", false);
+		fSetShieldThickness->SetDefaultUnit("cm");
 		fSetShieldThickness->AvailableForStates(G4State_PreInit, G4State_Idle);
 	}
 
 	void DetectorMessenger::SetNewValue(G4UIcommand* cmd, G4String newValues) {
 		if (cmd == fCreateShield) {
-			
+			fDetConstruction->CreateShield(*fShieldThickness, *fMaterialName);
 		}
+		if (cmd == fRemoveShield) {
+			fDetConstruction->RemoveShield();
+		}
+		if (cmd == fSetShieldMaterial) {
+			if (fDetConstruction->CreateShield(*fShieldThickness, *fMaterialName)) {
+				*fMaterialName = newValues;
+			}
+		}
+		if (cmd == fSetShieldThickness) {
+			if (fDetConstruction->CreateShield(*fShieldThickness, *fMaterialName)) {
+				*fShieldThickness = fSetShieldThickness->GetNewDoubleValue(newValues);
+			}
+		}
+
+		G4UImanager* UI = G4UImanager::GetUIpointer();
+
+		UI->ApplyCommand("/run/beamOn 0");
+		UI->ApplyCommand("/vis/viewer/rebuild");
 	}
 }
