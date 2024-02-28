@@ -38,6 +38,8 @@ namespace rad_shield {
 		}
 		if (cmd == fRemoveShield) {
 			fDetConstruction->RemoveShield();
+			// bug: when you change the shield's size or material,
+			// then remove it, then try to run beam on, it crashes.
 		}
 		if (cmd == fSetShieldMaterial) {
 			if (fDetConstruction->CreateShield(*fShieldThickness, newValues)) {
