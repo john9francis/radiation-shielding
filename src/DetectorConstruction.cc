@@ -12,10 +12,52 @@ namespace rad_shield {
 		// nothing yet...
 	}
 
-	void DetectorConstruction::CreateShield(G4double thickness, G4String materialName) {
-		// create an object and add it to the world
+	G4bool DetectorConstruction::CreateShield(G4double thickness, G4String materialName) {
+		// Returns true if the shield was created sucessfully
+
+		// Make sure the desired thickness isn't over the max thickness
+		if (thickness > fMaxShieldThickness) {
+			G4cout
+				<< "Attempted to create a shield "
+				<< "that is too thick with a value of: "
+				<< thickness
+				<< G4endl;
+
+			return false;
+		}
+
+		// Also make sure the material is in the nist database
+		G4NistManager* nist = G4NistManager::Instance();
+
+		auto shieldMaterial = nist->FindMaterial(materialName);
+
+		if (shieldMaterial == nullptr) {
+			G4cout
+				<< "Attempted to create a shield "
+				<< "With a material not found in the "
+				<< "NIST material database. Attempted material: "
+				<< materialName
+				<< G4endl;
+
+			return false;
+		}
+
+		// make sure world has been initialized
+		if (fLogicWorld == nullptr) {
+			G4cout
+				<< "Attempted to create a shield "
+				<< "before world object has been initialized. "
+				<< "please wait till the detector construction "
+				<< "has been initialized. "
+				<< G4endl;
+			return false;
+		}
+
+		// if we pass the test, create the shield and add to world
+
 		G4ThreeVector shieldPos = G4ThreeVector();
-		G4double maxThickness = 1.5 * m;
+
+		return true;
 	}
 
 	G4VPhysicalVolume* DetectorConstruction::Construct() {
@@ -33,7 +75,7 @@ namespace rad_shield {
 			worldWidth / 2
 		);
 
-		G4LogicalVolume* logicWorld = new G4LogicalVolume(
+		fLogicWorld = new G4LogicalVolume(
 			solidWorld,
 			vacuum,
 			"logicWorld"
@@ -42,7 +84,7 @@ namespace rad_shield {
 		G4VPhysicalVolume* physWorld = new G4PVPlacement(
 			nullptr,
 			G4ThreeVector(),
-			logicWorld,
+			fLogicWorld,
 			"physWorld",
 			nullptr,
 			false,

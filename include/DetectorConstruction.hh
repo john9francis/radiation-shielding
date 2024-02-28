@@ -13,7 +13,12 @@ namespace rad_shield {
 		G4VPhysicalVolume* Construct() override;
 
 		// For Detector Messenger
-		void CreateShield(G4double thickness, G4String materialName);
+		G4bool CreateShield(G4double thickness, G4String materialName);
+
+	private:
+		G4LogicalVolume* fLogicWorld = nullptr;
+
+		G4double fMaxShieldThickness = 1.5 * m;
 	};
 }
 
