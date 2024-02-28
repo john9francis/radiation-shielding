@@ -33,6 +33,11 @@ namespace rad_shield {
 	}
 
 	void DetectorMessenger::SetNewValue(G4UIcommand* cmd, G4String newValues) {
+
+		// get ui pointer for later
+		G4UImanager* UI = G4UImanager::GetUIpointer();
+
+
 		if (cmd == fCreateShield) {
 			// TODO: basically show it visually and set it to the previous material
 			fDetConstruction->UpdateShieldMaterial(*fMaterialName);
@@ -40,8 +45,7 @@ namespace rad_shield {
 			fDetConstruction->CreateShield(*fShieldThickness, *fMaterialName);
 
 			// show the shield to the viewport
-			G4UImanager* ui = G4UImanager::GetUIpointer();
-			ui->ApplyCommand("/vis/geometry/set/visibility logicShield 0 true");
+			//UI->ApplyCommand("/vis/geometry/set/visibility logicShield 0 true");
 		}
 		if (cmd == fRemoveShield) {
 			// make the shield vacuum
@@ -52,8 +56,7 @@ namespace rad_shield {
 			// hide shield from viewport
 			// note: again, ideally, we would get the name of the logicShield
 			// instead of hardcoding it, but it's fine for now.
-			G4UImanager* ui = G4UImanager::GetUIpointer();
-			ui->ApplyCommand("/vis/geometry/set/visibility logicShield 0 false");
+			//UI->ApplyCommand("/vis/geometry/set/visibility logicShield 0 false");
 
 		}
 		if (cmd == fSetShieldMaterial) {
@@ -69,8 +72,7 @@ namespace rad_shield {
 			}
 		}
 
-		G4UImanager* UI = G4UImanager::GetUIpointer();
-
+		// reset viewport
 		UI->ApplyCommand("/run/beamOn 0");
 		UI->ApplyCommand("/vis/viewer/rebuild");
 	}
