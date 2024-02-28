@@ -15,6 +15,7 @@ namespace rad_shield {
 
 		G4ParticleGun* fParticleGun;
 	private:
+		// Function to generate a right skewed energy distribution
 		G4double generateRightSkewed(G4double mean, G4double sigma=.5*MeV);
 	};
 }

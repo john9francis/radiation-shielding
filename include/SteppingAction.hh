@@ -13,6 +13,7 @@ namespace rad_shield {
 		void UserSteppingAction(const G4Step*) override;
 
 	private:
+		// Graph ID's
 		G4double fPDDH1ID = 0;
 
 
