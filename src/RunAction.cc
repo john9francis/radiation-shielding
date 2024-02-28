@@ -19,7 +19,7 @@ namespace rad_shield {
 		analysisManager->SetH1YAxisTitle(0, "Energy deposited (MeV)");
 
 		// graph of the original energies
-		analysisManager->CreateH1("OriginalEnergies", "Original Particle Energies", 100, 0, 10 * MeV);
+		analysisManager->CreateH1("OriginalEnergies", "Original Particle Energies", 100, 0, 6 * MeV);
 		analysisManager->SetH1XAxisTitle(1, "Energy (MeV)");
 		analysisManager->SetH1YAxisTitle(1, "Number of Particles");
 
