@@ -12,6 +12,19 @@ namespace rad_shield {
 		// nothing yet...
 	}
 
+	void DetectorConstruction::RemoveShield() {
+		if (fShield) {
+			delete fShield;
+		}
+	}
+
+	G4bool DetectorConstruction::ExistsShield() {
+		if (fShield == nullptr) {
+			return false;
+		}
+		return true;
+	}
+
 	G4bool DetectorConstruction::CreateShield(G4double thickness, G4String materialName) {
 		// Returns true if the shield was created sucessfully
 
@@ -115,7 +128,7 @@ namespace rad_shield {
 			phantomPos,
 			logicPhantom,
 			"physPhantom",
-			logicWorld,
+			fLogicWorld,
 			false,
 			0
 		);
