@@ -25,7 +25,7 @@ namespace rad_shield {
 		fParticleGun->SetParticlePosition(G4ThreeVector(0, 0, -1 * m));
 
 		// set default particle
-		G4String particleName = "e-";
+		G4String particleName = "gamma";
 		G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
 		G4ParticleDefinition* particle
 			= particleTable->FindParticle(particleName);
@@ -33,7 +33,7 @@ namespace rad_shield {
 		fParticleGun->SetParticleDefinition(particle);
 
 		// set default energy
-		fParticleGun->SetParticleEnergy(.511 * MeV);
+		fParticleGun->SetParticleEnergy(1 * MeV);
 
 		
 	}

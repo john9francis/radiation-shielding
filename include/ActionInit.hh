@@ -8,14 +8,12 @@
 namespace rad_shield {
 	class ActionInit : public G4VUserActionInitialization {
 	public:
-		ActionInit(PrimaryGeneratorAction* pga);
+		ActionInit();
 		~ActionInit() = default;
 
 		void Build() const override;
 		void BuildForMaster() const override;
 		
-	private:
-		PrimaryGeneratorAction* fPGA;
 	};
 }
 

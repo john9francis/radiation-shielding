@@ -32,12 +32,8 @@ int main(int argc, char** argv)
 
 	runManager->SetUserInitialization(new PhysicsList());
 	runManager->SetUserInitialization(new DetectorConstruction());
-
-	// pointer to our pga to be used in the messenger
-	PrimaryGeneratorAction* pga = new PrimaryGeneratorAction();
-	new PGAMessenger(pga);
 	
-	runManager->SetUserInitialization(new ActionInit(pga));
+	runManager->SetUserInitialization(new ActionInit());
 
 	// init vis manager
 	G4VisManager* visManager = new G4VisExecutive;
