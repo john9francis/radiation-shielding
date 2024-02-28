@@ -10,7 +10,6 @@
 #include "DetectorConstruction.hh"
 
 #include "PrimaryGeneratorAction.hh"
-#include "PGAMessenger.hh"
 
 using namespace rad_shield;
 
@@ -32,7 +31,6 @@ int main(int argc, char** argv)
 
 	runManager->SetUserInitialization(new PhysicsList());
 	runManager->SetUserInitialization(new DetectorConstruction());
-	
 	runManager->SetUserInitialization(new ActionInit());
 
 	// init vis manager
