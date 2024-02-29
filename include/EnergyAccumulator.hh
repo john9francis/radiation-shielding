@@ -16,7 +16,7 @@ public:
     }
 
     ~EnergyAccumulator() {
-        delete accumulable;
+        delete fAccumulable;
     }
 
     // Function to accumulate energy from stepping action
