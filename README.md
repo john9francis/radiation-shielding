@@ -8,11 +8,14 @@ This app is useful for testing materials and how well they shield against any ty
 
 # How to download
 
-Executable (Recommended): It is necessary to have Geant4 installed correctly to run the executable.
+### Executable (Recommended): 
+It is necessary to have Geant4 installed correctly to run the executable.
 
-Docker: coming soon
+### Docker: 
+coming soon
 
-Compiling source code: Use CMake to build the project. There is a CMakeLists.txt file in the root directory. Here's how to configure cmake:
+### Compiling source code: 
+Use CMake to build the project. There is a CMakeLists.txt file in the root directory. Here's how to configure cmake:
 ```
 mkdir build
 cd build
@@ -28,11 +31,20 @@ Note: You must have [Root](https://root.cern/) installed to open up any graphs f
 
 # How to use
 
-Radiation Shielding comes with all the basic Geant4 ui commands, as well as a new directory called: `/shield/`. The commands in the `/shield/` directory are as follows:
+Radiation Shielding can be run either by double clicking on the executable (opens gui) or by running from the command line with a mac file argument (no gui). Either way, while the application is active, the user can enter ui commands to affect the run. 
+
+Radiation Shielding comes with all the basic Geant4 ui commands, as well as a new directory called: `/shield/`. 
+
+### Shield UI commands
+The commands in the `/shield/` directory are as follows:
 - `/shield/enable` Puts the shield into the world. Note: by default, the shield is already in the world.
 - `/shield/disable` Changes the shield's material to vacuum. Note: the shield will still be visible in the world, but it won't affect the particle's path in any way. Note: the material of the shield before the `disable` command is saved, and can be restored with `enable`.
 - `/shield/setMaterial <Geant4 NIST Material name>` Changes the shield's material to what the user enters. Note: that material must be found in the [Geant4 NIST materials database](https://geant4-userdoc.web.cern.ch/UsersGuides/ForApplicationDeveloper/html/Appendix/materialNames.html), otherwise the material will not be changed.
 - `/shield/setThickness <New thickness value> <unit (default=cm)>` Changes the shield's thickness in the Z direction.
+
+### Other useful UI commands
+How to run a beam of particles:
+- `/run/beamOn <number of particles>` This is the most useful command. It shoots a beam of particles from the particle gun.
 
 Using the Geant4 particle gun class, you can change the particle type or energy etc. Here are some helpful commands:
 - `/gun/particle <particleName>` Sets a new particle to be shot
