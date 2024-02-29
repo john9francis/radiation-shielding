@@ -1,23 +1,35 @@
+# Example mac file for a run
+#
+# Initialize the run
+#
 /run/initialize
 #
-# open output file
+# Open output file
 #
 /analysis/openFile run
 #
-# Photons first
+# Specify the shield thickness and material
+#
+# Lead shield
+/shield/setMaterial G4_Pb
+#
+# make it very thin
+/shield/setThickness 1 nm
+/shield/disable
+#
+# Shoot some photons first
 #
 /gun/particle gamma
-/gun/energy 1.5 MeV
-#/pga/setRightSkew .5 MeV
+/gun/energy 1 MeV
 /run/beamOn 1000000
 #
 # Electrons next
 #
 #/gun/particle e-
 #/gun/energy .5 MeV
-#/pga/setRightSkew .35 MeV
 #/run/beamOn 100000
 #
-# close output file
+# Write and close output file
+#
 /analysis/write
 /analysis/closeFile
