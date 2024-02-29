@@ -104,12 +104,11 @@ namespace rad_shield {
 
 		G4Box* solidPhantom = new G4Box(
 			"solidPhantom",
-			15 * cm,
-			15 * cm,
-			15 * cm
+			fPhantomSize.getX() / 2,
+			fPhantomSize.getY() / 2,
+			fPhantomSize.getZ() / 2
 		);
 
-		G4ThreeVector phantomPos = G4ThreeVector(0, 0, 1 * m);
 
 		G4LogicalVolume* logicPhantom = new G4LogicalVolume(
 			solidPhantom,
@@ -119,7 +118,7 @@ namespace rad_shield {
 
 		new G4PVPlacement(
 			nullptr,
-			phantomPos,
+			fPhantomPos,
 			logicPhantom,
 			"physPhantom",
 			fLogicWorld,

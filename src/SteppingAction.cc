@@ -4,6 +4,9 @@
 #include "G4AnalysisManager.hh"
 #include "G4SystemOfUnits.hh"
 
+#include "G4RunManager.hh"
+#include "DetectorConstruction.hh"
+
 namespace rad_shield {
 	void SteppingAction::UserSteppingAction(const G4Step* aStep) {
 		// Get our current volume.
@@ -21,8 +24,13 @@ namespace rad_shield {
 			auto analysisManager = G4AnalysisManager::Instance();
 
 			// add to the PDD graph
-			// the + 15 * cm converts position to depth.
-			analysisManager->FillH1(fPDDH1ID, pos.getZ() + 15 * cm, energy);
+			// Note: first, we have to find the detector construction and get 
+			// the phantom pos
+			auto runManager = G4RunManager::GetRunManager();
+			const DetectorConstruction* detConst = static_cast<const DetectorConstruction*>(runManager->GetUserDetectorConstruction());
+			const G4double phantomEdgePos = detConst->GetPhantomEdgeZ();
+
+			analysisManager->FillH1(fPDDH1ID, pos.getZ() - phantomEdgePos, energy);
 
 
 		}

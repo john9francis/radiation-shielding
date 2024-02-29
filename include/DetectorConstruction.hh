@@ -20,6 +20,9 @@ namespace rad_shield {
 		G4bool UpdateShieldThickness(G4double newThickness);
 		G4bool UpdateShieldMaterial(G4String newMaterialName);
 
+		// For PDD Graph
+		G4double GetPhantomEdgeZ() const { return fPhantomPos.getZ() - fPhantomSize.getZ() / 2; };
+
 	private:
 		G4LogicalVolume* fLogicWorld = nullptr;
 
@@ -28,6 +31,9 @@ namespace rad_shield {
 		G4VPhysicalVolume* fPhysShield = nullptr;
 
 		G4double fMaxShieldThickness = 1.5 * m;
+
+		G4ThreeVector fPhantomSize = G4ThreeVector(30 * cm, 30 * cm, 30 * cm);
+		G4ThreeVector fPhantomPos = G4ThreeVector(0, 0, 1 * m);
 	};
 }
 
