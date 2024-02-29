@@ -57,5 +57,5 @@ Using the analysis UI messenger, we can open a root file to store our output gra
 
 # Goals
 - [x] Allow for any material and (almost) any thickness for a shield
-- [ ] Output how much energy was deposited into the phantom
+- [ ] Output an accumulated how much energy was deposited into the phantom
 - [ ] Allow for to change energy distribution of primaries with messenger
