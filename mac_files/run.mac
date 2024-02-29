@@ -1,12 +1,8 @@
-# Example mac file for a run
+# Example mac file for what we can do with Radiation Shielding
 #
 # Initialize the run
 #
 /run/initialize
-#
-# Open output file
-#
-/analysis/openFile run
 #
 # Specify the shield thickness and material
 #
@@ -14,20 +10,47 @@
 /shield/setMaterial G4_Pb
 #
 # make it very thin
-/shield/setThickness 1 nm
-/shield/disable
+/shield/setThickness 1 cm
+#
+# Open output file
+#
+/analysis/openFile shieldRun
 #
 # Shoot some photons first
 #
 /gun/particle gamma
-/gun/energy 1 MeV
+/gun/energy 10 MeV
 /run/beamOn 1000000
 #
 # Electrons next
 #
-#/gun/particle e-
-#/gun/energy .5 MeV
-#/run/beamOn 100000
+/gun/particle e-
+/gun/energy .5 MeV
+/run/beamOn 100000
+#
+# Write and close output file
+#
+/analysis/write
+/analysis/closeFile
+#
+# Repeat without shielding
+/shield/disable
+#
+# Open output file
+#
+/analysis/openFile nonShieldRun
+#
+# Shoot some photons first
+#
+/gun/particle gamma
+/gun/energy 10 MeV
+/run/beamOn 1000000
+#
+# Electrons next
+#
+/gun/particle e-
+/gun/energy .5 MeV
+/run/beamOn 100000
 #
 # Write and close output file
 #
